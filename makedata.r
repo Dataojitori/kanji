@@ -30,8 +30,8 @@ yomi <- function( word ){
 }
 
 file = "C:/Users/LENOVO/OneDrive/kanji/data/"
-for (i in 10:11) {
-    name = paste(file, "my_yomi_", i, ".txt", sep="")
+for (i in 1:9) {
+    name = paste(file, "my_yomi_0", i, ".txt", sep="")
     print(name)
     
     data=readLines(name,encoding ="UTF-8" )        
@@ -40,9 +40,9 @@ for (i in 10:11) {
     kanjis = levels( factor( barabara[,4] ) )
     #每一个汉字所在行数
     zu = t( sapply(kanjis, function(x)  which(barabara[, 4] == x) ) ) 
-    write.table(zu, paste("kakiindex", i, ".csv", sep=""), 
+    write.table(zu, paste("yomiindex", i, ".csv", sep=""), 
                 col.names = F, sep=",")
-    write.table(barabara,paste("kakiquiz", i, ".csv", sep=""), 
+    write.table(barabara,paste("yomiquiz", i, ".csv", sep=""), 
                 col.names = F, row.names = F, sep=",")
 }
 
