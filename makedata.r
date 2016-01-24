@@ -1,22 +1,33 @@
 library(stringr)
 
-tt=readLines("my_kaki_04.txt",encoding ="UTF-8" )
 
-answer = str_sub(str_extract(tt[1],"\\（.*\\）"), 2,-2)#提取答案
-quiz = sub(pattern="\\（.*）",replacement="x",tt[1]) #把答案替换成x
-monji = gsub(pattern="(\\［[^］]*］)|(｛[^｝]*｝)",replacement=" ",quiz) #去掉注音
-monji = str_trim(monji, side = "both" )
-kana = str_c(str_sub( str_extract_all(
-    quiz,"\\｛[^｝]*\\｝|\\［[^\\］]*\\］")[[1]], 2, -2 ), collapse = " ")
+format <- function( word ){
+    answer = str_sub(str_extract(word,"\\（.*\\）"), 2,-2)#提取答案
+    quiz = sub(pattern="\\（.*）",replacement="x",word) #把答案替换成x
+    monji = gsub(pattern="(\\［[^］]*］)|(｛[^｝]*｝)",replacement=" ",quiz) #去掉注音
+    monji = str_trim(monji, side = "both" )
+    kana = str_c(str_sub( str_extract_all(
+        quiz,"\\｛[^｝]*\\｝|\\［[^\\］]*\\］")[[1]], 2, -2 ), collapse = " ")
+    
+    out = c(monji, kana, answer)
+    return( out )
+}
+          
+file = "C:/Users/LENOVO/OneDrive/kanji/data/"
+for (i in 10:11) {
+    name = paste(file, "my_kaki_", i, ".txt", sep="")
+    print(name)
+    
+    data=readLines(name,encoding ="UTF-8" )        
+    #每一行为汉字部分,注音部分,答案
+    barabara = t( sapply( data, format,USE.NAMES = F ) )
+    kanjis = levels( factor( barabara[,3] ) )
+    #每一个汉字所在行数
+    zu = t( sapply(kanjis, function(x)  which(barabara[, 3] == x) ) ) 
+    write.table(zu, paste("index", i, ".csv", sep=""), 
+                col.names = F, sep=",")
+    write.table(barabara,paste("quiz", i, ".csv", sep=""), 
+                col.names = F, row.names = F, sep=",")
+}
 
-gsub(pattern="\\［[^］]*］",replacement=" ",tt[1])
-sub(pattern=".*\\（(.*)）.*",replacement="\\1",tt[1]) #提取答案
-sub(pattern="\\（.*）",replacement="x",tt[1]) #把答案替换成x
-fen2 = gsub(pattern="(\\［[^］]*］)|(｛[^｝]*｝)",replacement=" ",quiz) #去掉注音
-fen2 = str_trim(fen2, side = "both" ) #去除2端空白
 
-strsplit(fen2," ")[[1]] #包含汉字的部分
-
-fen3 = gsub(pattern="[\\｝］][^｛［]*[｛［]",replacement="-",tt[1]) #先去掉中间部分汉字
-fen3 = gsub(pattern="^.*[｛［]|[｝］].*$",replacement="-",fen3) #去掉首尾部分汉字
-fen3 = strsplit(fen3,"-")[[1]]
