@@ -163,7 +163,7 @@ class question:
 		self.clean = True
 		#保存文件
 		my_file = open( self.filename,'w' )  
-		pickle.dump( alldatas[self.filename]+self.filename, my_file )
+		pickle.dump( alldatas[self.filename]+[self.filename], my_file )
 		my_file.close()
 		
 	def run(self, screen):
