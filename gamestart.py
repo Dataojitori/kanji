@@ -21,7 +21,7 @@ background = pygame.image.load("stp_l_017.jpg").convert()
 
 #读取题库
 alldatas = {}
-for n in range(7)[1:] : 
+for n in range(2)[1:] : 
     my_file = open('kakidata'+str(n)+'.txt','r')  
     my_data = pickle.load(my_file)
     my_file.close()  
@@ -159,6 +159,7 @@ class question:
 								 * abs(sum(self.one_data['history'][-10:])) \
 								 / len( self.one_data['history'][-10:] )
 		self.one_data['time'].append( time.time() )
+		print self.filename
 		print self.one_data
 		print data_to_probability(self.one_data) #出现概率
 		self.clean = True

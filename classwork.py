@@ -139,7 +139,7 @@ def pickup(datas):
         for key in mygame : #每一个字的资料
             totla_score -= data_to_probability( mygame[key] )
             if totla_score < 0 :
-                quiz = mondai[ random.choice(mygame[key]['ichi']) ]
+                quiz = mondai[ random.choice(mygame[key]['ichi'])-1 ]
                 return [ mygame[key], quiz, filename ]
         
 

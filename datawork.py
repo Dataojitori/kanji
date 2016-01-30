@@ -4,17 +4,21 @@ import pickle
 
 #把原始数据转换成python格式并保存
 
-for n in range(12)[1:]:
-	ji = file('C:\Users\LENOVO\OneDrive\kanji\data\index'+str(n)+'.csv', 'rb')
-	reader = csv.reader(ji)
-	kakigame = {} #kaki游戏数据
-	for line in reader:
+for n in range(2)[1:]:
+	# ji = file('C:\Users\LENOVO\OneDrive\kanji\data\index'+str(n)+'.csv', 'rb')
+	# reader = csv.reader(ji)
+	# kakigame = {} #kaki游戏数据
+	# for line in reader:
 	    
-	    kakigame[line[0]] = {'ichi':[ int(x) for x in line[1:] ], 'right':0, \
-	                       'wrong':0, 'score':0, 'history':[], 'time':[] }
-	ji.close()
+	#     kakigame[line[0]] = {'ichi':[ int(x) for x in line[1:] ], 'right':0, \
+	#                        'wrong':0, 'score':0, 'history':[], 'time':[] }
+	# ji.close()
 
-
+	#更改已知文件
+	my_file = open('kakidata'+str(n)+'.txt','r')  
+    my_data = pickle.load(my_file)
+    my_file.close()      
+    
 	quizs = file('C:\Users\LENOVO\OneDrive\kanji\data\quiz'+str(n)+'.csv', 'rb')
 	reader = csv.reader(quizs)
 	kakimondai = [] #kaki题库 [ [汉字123],[注音123],"答案" ]
@@ -29,7 +33,11 @@ for n in range(12)[1:]:
 
 
 	savename = 'kakidata'+str(n)+'.txt'
-	datas = open( savename,'w' )  
-	pickle.dump( [kakigame, kakimondai, savename], datas)  
-	datas.close()  
+	# datas = open( savename,'w' )  
+	# pickle.dump( [kakigame, kakimondai, savename], datas)  
+	# datas.close()  
+	my_data[1] = kakimondai
+	my_file = open('kakidata'+str(n)+'.txt','w' )  
+	pickle.dump( my_data+[savename], my_file )
+	my_file.close()
 
