@@ -39,6 +39,6 @@ for n in range(2)[1:]:
 	# datas.close()  
 	my_data[1] = kakimondai
 	my_file = open('kakidata'+str(n)+'.txt','w' )  
-	pickle.dump( my_data+[savename], my_file )
+	pickle.dump( my_data, my_file )
 	my_file.close()
 
