@@ -43,7 +43,7 @@ class button(bun):
         #可执行语句
         self.magic = "None"
         #是否隐藏
-        self.hide = False
+        self.hide_all = False
         
     def setichi(self, ichi):
         #设定左上角坐标,并生成按钮工作区
@@ -70,15 +70,15 @@ class button(bun):
         
     def show_button(self) :
         #显现按钮
-        self.hide = False
+        self.hide_all = False
         
     def hide_button(self) :
         #隐藏按钮
-        self.hide = True
+        self.hide_all = True
 
     def combo(self, pos):
         #检测所给坐标是否在按钮区域内,是就返回true并引发按钮变色
-        if not self.hide :
+        if not self.hide_all :
             if self.rect.collidepoint(pos) :
                 self.tu.fill(self.color_excite) 
                 return True
@@ -89,17 +89,18 @@ class button(bun):
 
     def reset(self, pos):
         #按钮颜色复原并且如果被点击就返回True
-        if not self.hide :
-            self.tu.fill(self.color_normal)
+        self.tu.fill(self.color_normal)
+        if not self.hide_all :            
             if self.rect.collidepoint(pos) :                      
                 return self.magic  
         
     def draw(self, screen):
         #给定表面,画图
-        if not self.hide :
+        if self.hide_all == False:
             screen.blit( self.tu, self.ichi)
             if self.draw_word == True :
                 super(button, self).draw(screen)
+            #print self.hide, time.time()
 
 
 def num_to_probability(num) :

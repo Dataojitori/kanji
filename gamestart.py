@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-import pygame, time
+import pygame, time, pickle
 from pygame.locals import *
 from sys import exit
 from classwork import *
@@ -122,22 +122,26 @@ class question:
 		self.words.add(answer_tekaku)
 		
 		#按钮部分
-		#右下角提交
+		#右下角提交		
 		self.submit = button('submit', (answer_size, pix_to_ground), \
 							 light_blue, ruriiro)
 		self.submit.setichi( [answer_tekaku.get_ichi()[0], \
 						 answer_tekaku.get_ichi()[1] + answer_size] )
 		self.submit.link_to( "self.answer.show_word(); self.submit.hide_button(); \
 						      self.right.show_button(); self.wrong.show_button()" )
+		
 		self.buttons.add(self.submit)
 		#判断对错
-		self.right = button(u'O', (screen_size[0]/2, pix_to_ground), red, dark_red)
-		self.right.setichi( (0, screen_size[1]-pix_to_ground) )
+		ox_size = ( (screen_size[0]-answer_size*2)/2, answer_size/2 )
+		self.right = button(u'O', ox_size, red, dark_red)
+		self.right.setichi( (self.answer.get_ichi()[0] + answer_size, \
+							 self.answer.get_ichi()[1]) )
 		self.right.link_to( "self.submit_answer('right')" )
 		self.right.hide_button() 
 		self.buttons.add(self.right)
-		self.wrong = button(u'X', (screen_size[0]/2, pix_to_ground), blue, dark_blue)
-		self.wrong.setichi( (screen_size[0]/2, screen_size[1]-pix_to_ground) )
+		self.wrong = button(u'X', ox_size, blue, dark_blue)
+		self.wrong.setichi( (self.answer.get_ichi()[0] + answer_size, \
+		 					 self.answer.get_ichi()[1] + answer_size/2) )
 		self.wrong.link_to( "self.submit_answer('wrong')" )
 		self.wrong.hide_button()
 		self.buttons.add(self.wrong)
@@ -158,6 +162,9 @@ class question:
 		print self.one_data
 		self.clean = True
 		#保存文件
+		my_file = open( self.filename,'w' )  
+		pickle.dump( alldatas[self.filename], my_file )
+		my_file.close()
 		
 	def run(self, screen):
 
@@ -166,23 +173,23 @@ class question:
 		        if event.type == QUIT:            
 		            pygame.quit()
 		            exit()
-		        elif event.type == MOUSEBUTTONDOWN :
+		        elif event.type == MOUSEBUTTONDOWN :	    		        	
 		        	for b in self.buttons :
 		        		b.combo(event.pos)
 		        elif event.type == MOUSEBUTTONUP :
 		        	for b in self.buttons :
 		        		click = b.reset(event.pos)
-		        		if click :
-		        			print 'hit'		    
+		        		if click :		        			
+		        			print 'hit'			    		        				
 		        			exec click   				        		
 		            
 		    clock.tick(60)
 		    screen.blit( self.background, (0,0) ) #画背景
 
 		    for w in self.words :
-		    	w.draw(self.background)
+		    	w.draw(screen)	
 		    for b in self.buttons :
-		    	b.draw(self.background)
+		    	b.draw(screen)
 		    
 		    pygame.display.update()
 		    
@@ -207,6 +214,8 @@ print "all done"
 
 mygame = alldatas.values()[0][0]
 print sum([ x['score'] for x in mygame.values() ])
+#出现概率
+[ num_to_probability(x['score']) for x in mygame.values() ]
 
 
 
