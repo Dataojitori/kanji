@@ -4,10 +4,8 @@ import pickle
 
 #把原始数据转换成python格式并保存
 
-my_file = open('kakidata'+str(1)+'.txt','r') 
-my_data = pickle.load(my_file)
-my_file.close()    
-for n in range(2)[1:]:
+
+for n in range(12)[1:] :
 	# ji = file('C:\Users\LENOVO\OneDrive\kanji\data\index'+str(n)+'.csv', 'rb')
 	# reader = csv.reader(ji)
 	# kakigame = {} #kaki游戏数据
@@ -18,7 +16,10 @@ for n in range(2)[1:]:
 	# ji.close()
 
 	#更改已知文件
-	  
+	
+	my_file = open('kakidata'+str(n)+'.txt','r')
+	my_data = pickle.load(my_file)
+	my_file.close()    
     
 	quizs = file('C:\Users\LENOVO\OneDrive\kanji\data\quiz'+str(n)+'.csv', 'rb')
 	reader = csv.reader(quizs)
