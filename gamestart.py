@@ -21,7 +21,7 @@ background = pygame.image.load("stp_l_017.jpg").convert()
 
 #读取题库
 alldatas = {}
-for n in range(2)[1:] : 
+for n in range(7)[1:] : 
     my_file = open('kakidata'+str(n)+'.txt','r')  
     my_data = pickle.load(my_file)
     my_file.close()  
@@ -163,7 +163,7 @@ class question:
 		self.clean = True
 		#保存文件
 		my_file = open( self.filename,'w' )  
-		pickle.dump( alldatas[self.filename], my_file )
+		pickle.dump( alldatas[self.filename]+self.filename, my_file )
 		my_file.close()
 		
 	def run(self, screen):
@@ -216,6 +216,7 @@ mygame = alldatas.values()[0][0]
 print sum([ x['score'] for x in mygame.values() ])
 #出现概率
 [ num_to_probability(x['score']) for x in mygame.values() ]
+[ data_to_probability(x) for x in mygame.values() ]
 
 
 
