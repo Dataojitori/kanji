@@ -160,6 +160,7 @@ class question:
 								 / len( self.one_data['history'][-10:] )
 		self.one_data['time'].append( time.time() )
 		print self.one_data
+		print data_to_probability(self.one_data) #出现概率
 		self.clean = True
 		#保存文件
 		my_file = open( self.filename,'w' )  

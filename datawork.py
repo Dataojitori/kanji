@@ -21,7 +21,9 @@ for n in range(12)[1:]:
 	for line in reader:
 
 	    kanji = line[0].split(' ')
-	    kanji = [ w.replace('x', '\xa9\x96') for w in kanji ]
+	    for i in range(len(kanji)) :
+	        if kanji[i] == 'x' :
+	            kanji[i] = '\xa9\x96' 	  
 	    kakimondai.append( [kanji, line[1].split(' '), line[2] ] )
 	quizs.close() 
 
