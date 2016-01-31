@@ -21,7 +21,7 @@ background = pygame.image.load("stp_l_017.jpg").convert()
 
 #读取题库
 alldatas = {}
-for n in range(2)[1:] : 
+for n in range(7)[1:] : 
     my_file = open('kakidata'+str(n)+'.txt','r')  
     my_data = pickle.load(my_file)
     my_file.close()  
@@ -86,7 +86,12 @@ class question:
 		kana_size = 40
 		#随机抽取一道题的data,问题,所属题库文件名
 		self.one_data, mondai, self.filename = pickup(alldatas) 
-		#mondai = alldatas['kakidata1.txt'][1][30]
+		#修正题目为全假名的情况
+		mondai = is_all_kana(mondai)
+		#self.one_data = alldatas['kakidata5.txt'][0]['\xd4O']
+		#mondai = is_all_kana( alldatas['kakidata5.txt'][1][438] )
+		print self.filename
+		print self.one_data['ichi']
 		kanji_line = [ bun(x.decode('mbcs'), kanji_size) for x in mondai[0]]
 		kana_line = [ bun(x.decode('mbcs'), kana_size) for x in mondai[1]]
 		#计算最大行宽
@@ -159,7 +164,6 @@ class question:
 								 * abs(sum(self.one_data['history'][-10:])) \
 								 / len( self.one_data['history'][-10:] )
 		self.one_data['time'].append( time.time() )
-		print self.filename
 		print self.one_data
 		print data_to_probability(self.one_data) #出现概率
 		self.clean = True

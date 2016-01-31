@@ -142,7 +142,24 @@ def pickup(datas):
                 quiz = mondai[ random.choice(mygame[key]['ichi'])-1 ]
                 return [ mygame[key], quiz, filename ]
         
-
+def is_all_kana(mondai):
+    #给一条mondai,检查汉字部分分块数是否跟假名部分分块数相等
+    #如果不等,检查汉字部分哪一块是全假名,并用空集添加到假名部分相应分块
+    #返回修正后的mondai
+    if len(mondai[0]) == len(mondai[1]) :
+        pass
+    else :
+        my_file = open('my_kanas','r')
+        my_set = pickle.load(my_file)
+        my_file.close()
+        
+        for n in range(len(mondai[0])) :
+            word = mondai[0][n]
+            numkana = [ k in my_set for k in word.decode('mbcs') ]
+            if sum(numkana) == len( word.decode('mbcs') ) :
+                #如果所有字符都为假名
+                mondai[1].insert( n, '' )
+    return mondai
 
 # datas = {}
 # for n in range(7)[1:] : 
