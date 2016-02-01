@@ -8,7 +8,8 @@ class bun(object):
     """可显示的文字"""
     font_color = (2,50,164)
     def __init__(self, word, font_size):        
-        self.font = pygame.font.Font( "NotoSansCJKjp-Regular.otf", font_size)                                                 
+        #self.font = pygame.font.Font( "NotoSansCJKjp-Regular.otf", font_size)
+        self.font = pygame.font.SysFont( "Arial", font_size)                                                 
         self.word_picture = self.font.render( word, False, self.font_color )
         
     def get_width(self):

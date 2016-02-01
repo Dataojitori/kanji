@@ -26,7 +26,10 @@ for n in range(7)[1:] :
     my_data = pickle.load(my_file)
     my_file.close()  
     alldatas[my_data[2]] = my_data[:2]
-    
+#总分数
+all_score = sum([ sum([d['score'] for d in s[0].values()]) \
+				for s in alldatas.values() ])
+
 
 class menu:
 	"""游戏初始菜单"""
@@ -151,6 +154,13 @@ class question:
 		self.wrong.hide_button()
 		self.buttons.add(self.wrong)
 		
+		#显示分数
+		global all_score
+		num_size = 30
+		seiseki = bun( str(round(all_score, 2)), num_size )
+		seiseki.setichi( [screen_size[0]-num_size*4, num_size] )
+		self.words.add(seiseki)
+		
 	def submit_answer(self, answer) :
 		#提交答案并把答案记录到data里
 		if answer == 'right' :
@@ -158,11 +168,12 @@ class question:
 			point = 1
 		else :
 			point = -1
+		moto_score = self.one_data['score']
 		self.one_data[answer] += 1
 		self.one_data['history'].append(point)		
 		self.one_data['score'] = ( self.one_data['score'] + point ) \
 								 * abs(sum(self.one_data['history'][-10:])) \
-								 / len( self.one_data['history'][-10:] )
+								 / float(len( self.one_data['history'][-10:] ))
 		self.one_data['time'].append( time.time() )
 		print self.one_data
 		print data_to_probability(self.one_data) #出现概率
@@ -172,6 +183,9 @@ class question:
 		pickle.dump( alldatas[self.filename]+[self.filename], my_file )
 		my_file.close()
 		
+		global all_score
+		all_score += self.one_data['score'] - moto_score
+		print all_score
 	def run(self, screen):
 
 		while True:    
