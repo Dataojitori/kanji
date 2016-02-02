@@ -28,8 +28,11 @@ for n in range(7)[1:] :
     alldatas[my_data[2]] = my_data[:2]
 #总分数
 all_score = sum([ sum([d['score'] for d in s[0].values()]) \
-				for s in alldatas.values() ])
+				  for s in alldatas.values() ])
 hp = time_to_hp(all_score)
+haaku_kanji = sum([ sum([ score_to_haaku(d['score']) for d in s[0].values()]) \
+				  for s in alldatas.values() ])
+print haaku_kanji
 
 class menu:
 	"""游戏初始菜单"""
@@ -89,6 +92,7 @@ class question:
 		kana_size = 40
 		#随机抽取一道题的data,问题,所属题库文件名
 		self.one_data, mondai, self.filename = pickup(alldatas) 
+		print "probability" , data_to_probability(self.one_data)
 		#修正题目为全假名的情况
 		mondai = is_all_kana(mondai)
 		#self.one_data = alldatas['kakidata5.txt'][0]['\xd4O']

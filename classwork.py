@@ -104,7 +104,7 @@ class button(bun):
 
 
 def num_to_probability(num) :
-    #给一个数,根据1 / ( 1 + e**z)返回它的对应概率
+    #给一个分数,根据1 / ( 1 + e**z)返回它的对应概率
     #数值越大概率越小
     return 1 / ( 1 + e**num)
     
@@ -167,6 +167,13 @@ def time_to_hp(all_score):
     hp = ( starttime - time.time() ) / 3600 * 5 -161.33 + all_score
     return hp
 
+def score_to_haaku(score):
+    #把一道题的得分转换成对这个汉字的掌握率.只计算正值,负值返回0
+    if score > 0 :     
+        return 1 - num_to_probability(score)
+    else :
+        return 0
+    
 # datas = {}
 # for n in range(7)[1:] : 
 #     my_file = open('kakidata'+str(n)+'.txt','r')  
