@@ -8,8 +8,7 @@ class bun(object):
     """可显示的文字"""
     font_color = (2,50,164)
     def __init__(self, word, font_size):        
-        #self.font = pygame.font.Font( "NotoSansCJKjp-Regular.otf", font_size)
-        self.font = pygame.font.SysFont( "Arial", font_size)                                                 
+        self.font = pygame.font.Font( "NotoSansCJKjp-Regular.otf", font_size)                                                        
         self.word_picture = self.font.render( word, False, self.font_color )
         
     def get_width(self):
@@ -161,6 +160,12 @@ def is_all_kana(mondai):
                 #如果所有字符都为假名
                 mondai[1].insert( n, '' )
     return mondai
+
+def time_to_hp(all_score):
+    #给定当前分数,求出当前hp
+    starttime = 1454401404.71
+    hp = ( starttime - time.time() ) / 3600 * 5 -161.33 + all_score
+    return hp
 
 # datas = {}
 # for n in range(7)[1:] : 

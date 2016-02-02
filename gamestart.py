@@ -29,7 +29,7 @@ for n in range(7)[1:] :
 #总分数
 all_score = sum([ sum([d['score'] for d in s[0].values()]) \
 				for s in alldatas.values() ])
-
+hp = time_to_hp(all_score)
 
 class menu:
 	"""游戏初始菜单"""
@@ -157,9 +157,14 @@ class question:
 		#显示分数
 		global all_score
 		num_size = 30
-		seiseki = bun( str(round(all_score, 2)), num_size )
-		seiseki.setichi( [screen_size[0]-num_size*4, num_size] )
+		seiseki = bun( u'得点:'+str(round(all_score, 2)), num_size )
+		seiseki.setichi( [screen_size[0] - seiseki.get_width(), num_size] )
 		self.words.add(seiseki)
+		#显示hp
+		global hp
+		life = bun( 'hp:'+str(round(hp, 2)), num_size )
+		life.setichi( [screen_size[0] - life.get_width(), num_size*2])
+		self.words.add(life)
 		
 	def submit_answer(self, answer) :
 		#提交答案并把答案记录到data里
@@ -183,9 +188,10 @@ class question:
 		pickle.dump( alldatas[self.filename]+[self.filename], my_file )
 		my_file.close()
 		
-		global all_score
+		global all_score, hp
 		all_score += self.one_data['score'] - moto_score
-		print all_score
+		hp = time_to_hp(all_score)
+		
 	def run(self, screen):
 
 		while True:    
