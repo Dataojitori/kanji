@@ -210,7 +210,7 @@ class question:
 		        	for b in self.buttons :
 		        		click = b.reset(event.pos)
 		        		if click :		        			
-		        			print 'hit'			    		        				
+		        			#print 'hit'			    		        				
 		        			exec click   				        		
 		            
 		    clock.tick(60)
