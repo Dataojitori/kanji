@@ -127,18 +127,31 @@ def pickup(datas):
     #返回所选题的[data,题目,文件名]
     
     #求总加权分数
-    totla_score = 0 
+    probabilitys = []
+    aver_time = 0  
+    this_time = time.time()
     for filename in datas :
         mygame = datas[filename][0]
-        totla_score += sum( [ data_to_probability(x) for x in mygame.values() ])
+        for x in mygame.values() :
+            one_prob = data_to_probability(x)
+            probabilitys.append( one_prob )
+            if x['time'] :              
+                aver_time += one_prob * ( this_time - x['time'][-1] )
+            else :
+                aver_time += one_prob * 3600 * 48               
+            
+    totla_prob = sum(probabilitys)
+    aver_time = aver_time / totla_prob / 3600 #加权平均小时 
         
-    totla_score = totla_score*random.random()    
+    #probabilitys.sort(reverse = True)
+    print "加权平均小时", aver_time
+    totla_prob = totla_prob*random.random()    
     #根据随机数寻找目标
     for filename in datas :
         mygame, mondai = datas[filename]
         for key in mygame : #每一个字的资料
-            totla_score -= data_to_probability( mygame[key] )
-            if totla_score < 0 :
+            totla_prob -= data_to_probability( mygame[key] )
+            if totla_prob < 0 :
                 quiz = mondai[ random.choice(mygame[key]['ichi'])-1 ]
                 return [ mygame[key], quiz, filename ]
         
