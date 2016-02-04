@@ -108,19 +108,21 @@ def num_to_probability(num) :
     #数值越大概率越小
     return 1 / ( 1 + e**num)
     
-def cool_down(mytime) :
+def cool_down(mytime, this_time) :
     #给定一个日期列表,根据它最后日期距现时刻的时长返回一个概率,时间越长概率越大 
     #如果列表为空,返回0.5   
     #间隔为2天时z为4
     if mytime :
-        z = 4 - (time.time() - mytime[-1] ) / 86400 * 4 
+        z = 4 - (this_time - mytime[-1] ) / 86400 * 4 
         return num_to_probability(z)
     else :
         return 0.5
         
-def data_to_probability(dirt) :
+def data_to_probability(dirt, this_time=None) :
     #给定游戏字典里的一行值,返回它的加权概率
-    return num_to_probability( dirt['score'] ) * cool_down(dirt['time'])
+    if not this_time :
+        this_time = time.time()
+    return num_to_probability( dirt['score'] ) * cool_down(dirt['time'], this_time)
     
 def pickup(datas):
     #传入不同年级题库的集合,按照加权随机从题库中出题,
@@ -134,7 +136,7 @@ def pickup(datas):
     for filename in datas :
         mygame = datas[filename][0]
         for x in mygame.values() :
-            one_prob = data_to_probability(x)
+            one_prob = data_to_probability(x, this_time)
             probabilitys.append( one_prob )
             aver_prob += one_prob**2
             if x['time'] :              
@@ -158,6 +160,36 @@ def pickup(datas):
             if totla_prob < 0 :
                 quiz = mondai[ random.choice(mygame[key]['ichi'])-1 ]
                 return [ mygame[key], quiz, filename, aver_time, aver_prob ]
+                
+def pickup2(datas):
+    #传入不同年级题库的集合,按照加权对出题优先度排序后返回优先度最高的一题
+    #返回所选题的[data,题目,文件名]
+    
+    #求总加权分数
+    zu = []
+    aver_time = 0  #平均时间
+    aver_prob = 0  #平均概率
+    this_time = time.time()
+    for filename in datas :
+        mygame = datas[filename][0]
+        for x in mygame.values() :
+            one_prob = data_to_probability(x, this_time)                    
+            aver_prob += one_prob**2
+            zu.append( [one_prob, filename, x] )  
+            if x['time'] :              
+                aver_time += one_prob * ( this_time - x['time'][-1] )
+            else :
+                aver_time += one_prob * 3600 * 48               
+            
+    totla_prob = sum( [x[0] for x in zu] )
+    aver_time = round( aver_time / totla_prob / 3600, 2) #加权平均小时 
+    aver_prob = round( aver_prob / totla_prob, 3)
+        
+    zu.sort(key = lambda x:x[0], reverse = True)
+    choice = zu[0]    
+    print [p[0] for p in zu[:10]]
+    quiz = datas[choice[1]][1][random.choice(zu[0][2]['ichi']) - 1]      
+    return [ choice[2], quiz, choice[1], aver_time, aver_prob ]
         
 def is_all_kana(mondai):
     #给一条mondai,检查汉字部分分块数是否跟假名部分分块数相等

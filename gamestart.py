@@ -91,7 +91,7 @@ class question:
 		kanji_size = 80
 		kana_size = 40
 		#随机抽取一道题的data,问题,所属题库文件名
-		self.one_data, mondai, self.filename, shinsen, cooldown = pickup(alldatas) 
+		self.one_data, mondai, self.filename, shinsen, cooldown = pickup2(alldatas) 
 		print "probability" , data_to_probability(self.one_data)
 		#修正题目为全假名的情况
 		mondai = is_all_kana(mondai)
