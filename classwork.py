@@ -181,7 +181,7 @@ def is_all_kana(mondai):
 def time_to_hp(all_score):
     #给定当前分数,求出当前hp
     starttime = 1454401404.71
-    hp = ( starttime - time.time() ) / 3600 * 5 -161.33 + all_score
+    hp = ( starttime - time.time() ) / 3600 * 6 -161.33 + all_score
     return hp
 
 def score_to_haaku(score):
