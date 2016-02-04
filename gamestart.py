@@ -91,7 +91,7 @@ class question:
 		kanji_size = 80
 		kana_size = 40
 		#随机抽取一道题的data,问题,所属题库文件名
-		self.one_data, mondai, self.filename = pickup(alldatas) 
+		self.one_data, mondai, self.filename, shinsen, cooldown = pickup(alldatas) 
 		print "probability" , data_to_probability(self.one_data)
 		#修正题目为全假名的情况
 		mondai = is_all_kana(mondai)
@@ -160,15 +160,23 @@ class question:
 		
 		#显示分数
 		global all_score
-		num_size = 30
+		num_size = 25
 		seiseki = bun( u'得点:'+str(round(all_score, 2)), num_size )
-		seiseki.setichi( [screen_size[0] - seiseki.get_width(), num_size] )
+		seiseki.setichi( [screen_size[0] - seiseki.get_width(), 0] )
 		self.words.add(seiseki)
 		#显示hp
 		global hp
 		life = bun( 'hp:'+str(round(hp, 2)), num_size )
-		life.setichi( [screen_size[0] - life.get_width(), num_size*2])
+		life.setichi( [screen_size[0] - life.get_width(), num_size*1])
 		self.words.add(life)
+		#新鲜度
+		shinsen = bun( u'新鮮:'+str(shinsen), num_size )
+		shinsen.setichi( [screen_size[0] - shinsen.get_width(), num_size*2])
+		self.words.add(shinsen)
+		#新鲜度
+		cooldown = bun( u'冷却率:'+str(cooldown), num_size )
+		cooldown.setichi( [screen_size[0] - cooldown.get_width(), num_size*3])
+		self.words.add(cooldown)
 		
 	def submit_answer(self, answer) :
 		#提交答案并把答案记录到data里
@@ -181,8 +189,8 @@ class question:
 		self.one_data[answer] += 1
 		self.one_data['history'].append(point)		
 		self.one_data['score'] = ( self.one_data['score'] + point ) \
-								 * abs(sum(self.one_data['history'][-10:])) \
-								 / float(len( self.one_data['history'][-10:] ))
+								 * abs(sum(self.one_data['history'][-5:])) \
+								 / float(len( self.one_data['history'][-5:] ))
 		self.one_data['time'].append( time.time() )
 		print self.one_data
 		print data_to_probability(self.one_data) #出现概率

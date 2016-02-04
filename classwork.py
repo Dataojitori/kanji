@@ -129,22 +129,26 @@ def pickup(datas):
     #求总加权分数
     probabilitys = []
     aver_time = 0  
+    aver_prob = 0
     this_time = time.time()
     for filename in datas :
         mygame = datas[filename][0]
         for x in mygame.values() :
             one_prob = data_to_probability(x)
             probabilitys.append( one_prob )
+            aver_prob += one_prob**2
             if x['time'] :              
                 aver_time += one_prob * ( this_time - x['time'][-1] )
             else :
                 aver_time += one_prob * 3600 * 48               
             
     totla_prob = sum(probabilitys)
-    aver_time = aver_time / totla_prob / 3600 #加权平均小时 
+    aver_time = round( aver_time / totla_prob / 3600, 2) #加权平均小时 
+    aver_prob = round( aver_prob / totla_prob, 3)
         
     #probabilitys.sort(reverse = True)
-    print "加权平均小时", aver_time
+    #print "加权平均小时", aver_time
+    #print "加权平均概率", aver_prob
     totla_prob = totla_prob*random.random()    
     #根据随机数寻找目标
     for filename in datas :
@@ -153,7 +157,7 @@ def pickup(datas):
             totla_prob -= data_to_probability( mygame[key] )
             if totla_prob < 0 :
                 quiz = mondai[ random.choice(mygame[key]['ichi'])-1 ]
-                return [ mygame[key], quiz, filename ]
+                return [ mygame[key], quiz, filename, aver_time, aver_prob ]
         
 def is_all_kana(mondai):
     #给一条mondai,检查汉字部分分块数是否跟假名部分分块数相等
