@@ -110,13 +110,13 @@ def num_to_probability(num) :
     
 def cool_down(mytime, this_time) :
     #给定一个日期列表,根据它最后日期距现时刻的时长返回一个概率,时间越长概率越大 
-    #如果列表为空,返回0.5   
+    #如果列表为空,返回1   
     #间隔为2天时z为4
     if mytime :
         z = 4 - (this_time - mytime[-1] ) / 86400 * 4 
         return num_to_probability(z)
     else :
-        return 0.5
+        return 1
         
 def data_to_probability(dirt, this_time=None) :
     #给定游戏字典里的一行值,返回它的加权概率
