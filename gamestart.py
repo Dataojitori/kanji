@@ -7,11 +7,15 @@ from classwork import *
 #魔法变量
 screen_size = (800,600)
 red = (201,56,52)
+ared = (201,56,52,0)
 dark_red = (157,54,51)
 blue = (47,65,137)
+ablue = pygame.Color(146,168,209,125)
 dark_blue = (43,56,107)
 light_blue = (146, 168, 209)
 ruriiro = (37, 63, 130)
+pink = (247,202,201)
+black = (0,0,0)
 
 pygame.init()
 clock = pygame.time.Clock() 
@@ -91,7 +95,7 @@ class question:
 		kanji_size = 80
 		kana_size = 40
 		#随机抽取一道题的data,问题,所属题库文件名
-		self.one_data, mondai, self.filename, shinsen, cooldown = pickup2(alldatas) 
+		self.one_data, mondai, self.filename, shinsen, cooldown, probs = pickup2(alldatas) 
 		print "probability" , data_to_probability(self.one_data)
 		#修正题目为全假名的情况
 		mondai = is_all_kana(mondai)
@@ -177,6 +181,20 @@ class question:
 		cooldown = bun( u'冷却率:'+str(cooldown), num_size )
 		cooldown.setichi( [screen_size[0] - cooldown.get_width(), num_size*3])
 		self.words.add(cooldown)
+		#条形码
+		wait_width = screen_size[0]*0.5
+		wait_height = 20 
+		wait = pygame.Surface( [wait_width, wait_height], flags=SRCALPHA, depth=32)		
+		for p in probs :
+			x = p * wait_width
+			pygame.draw.aaline( wait, black, [x-1, 0], [x-1,wait_height], False )
+			pygame.draw.aaline( wait, black, [x, 0], [x,wait_height], False )
+			pygame.draw.aaline( wait, black, [x+1, 0], [x+1,wait_height], False )
+			
+		wait = kazari( wait )
+		wait.setichi( [screen_size[0]*0.25, screen_size[1]*0.3] )
+		self.words.add( wait )
+		
 		
 	def submit_answer(self, answer) :
 		#提交答案并把答案记录到data里

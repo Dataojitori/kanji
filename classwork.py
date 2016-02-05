@@ -4,6 +4,19 @@ from math import e
 from pygame.locals import *
 from sys import exit
 
+class kazari(object):
+    """只显示不进行互动的装饰"""
+    def __init__(self, pic):
+        self.kazari_pic = pic
+        
+    def setichi(self, kazari_ichi):
+        #设定左上角坐标,并生成按钮工作区
+        self.kazari_ichi = kazari_ichi
+        
+    def draw(self, screen):
+        #给定表面,画图     
+        screen.blit( self.kazari_pic, self.kazari_ichi )
+    
 class bun(object):
     """可显示的文字"""
     font_color = (2,50,164)
@@ -181,7 +194,8 @@ def pickup2(datas):
             else :
                 aver_time += one_prob * 3600 * 48               
             
-    totla_prob = sum( [x[0] for x in zu] )
+    probs = [x[0] for x in zu]
+    totla_prob = sum( probs )
     aver_time = round( aver_time / totla_prob / 3600, 2) #加权平均小时 
     aver_prob = round( aver_prob / totla_prob, 3)
         
@@ -189,7 +203,7 @@ def pickup2(datas):
     choice = zu[0]    
     print [p[0] for p in zu[:10]]
     quiz = datas[choice[1]][1][random.choice(zu[0][2]['ichi']) - 1]      
-    return [ choice[2], quiz, choice[1], aver_time, aver_prob ]
+    return [ choice[2], quiz, choice[1], aver_time, aver_prob, probs ]
         
 def is_all_kana(mondai):
     #给一条mondai,检查汉字部分分块数是否跟假名部分分块数相等
