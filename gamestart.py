@@ -99,8 +99,8 @@ class question:
 		print "probability" , data_to_probability(self.one_data)
 		#修正题目为全假名的情况
 		mondai = is_all_kana(mondai)
-		#self.one_data = alldatas['kakidata5.txt'][0]['\xd4O']
-		#mondai = is_all_kana( alldatas['kakidata5.txt'][1][438] )
+		#self.one_data = alldatas['kakidata6.txt'][0]['\xd4O']
+		#mondai = is_all_kana( alldatas['kakidata6.txt'][1][93] )
 		print self.filename
 		print self.one_data['ichi']
 		kanji_line = [ bun(x.decode('mbcs'), kanji_size) for x in mondai[0]]
