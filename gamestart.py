@@ -207,8 +207,8 @@ class question:
 		self.one_data[answer] += 1
 		self.one_data['history'].append(point)		
 		self.one_data['score'] = ( self.one_data['score'] + point ) \
-								 * abs(sum(self.one_data['history'][-5:])) \
-								 / float(len( self.one_data['history'][-5:] ))
+								 * abs(sum(self.one_data['history'][-4:])) \
+								 / float(len( self.one_data['history'][-4:] ))
 		self.one_data['time'].append( time.time() )
 		print self.one_data
 		print data_to_probability(self.one_data) #出现概率
