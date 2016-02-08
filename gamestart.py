@@ -205,16 +205,14 @@ class question:
 			point = -1
 		moto_score = self.one_data['score']
 		self.one_data[answer] += 1
-		self.one_data['history'].append(point)				
-		bi = sum([ (1 for x in self.one_data['history'][-3:] \
-			       if self.one_data['score'] * x > 0) ]) / \
-			 float(len( self.one_data['history'][-3:] )) 
-		print self.one_data['score'], bi
+		self.one_data['history'].append(point)					
+		bi = sum([ 1 for x in self.one_data['history'][-3:] \
+				   if self.one_data['score'] * x > 0 ]) / \
+			 float(len( self.one_data['history'][-3:] )) 		
 		self.one_data['score'] = self.one_data['score'] * bi + point
-		self.one_data['time'].append( time.time() )
-		print self.one_data['score']
+		self.one_data['time'].append( time.time() )		
 		print self.one_data
-		print data_to_probability(self.one_data) #出现概率
+		#print data_to_probability(self.one_data) #出现概率
 		self.clean = True
 		#保存文件
 		my_file = open( self.filename,'w' )  
