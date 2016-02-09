@@ -16,6 +16,8 @@ light_blue = (146, 168, 209)
 ruriiro = (37, 63, 130)
 pink = (247,202,201)
 black = (0,0,0)
+wasurenagusa = (137,195,235)#勿忘草
+sorairo = (160,216,239)
 
 pygame.init()
 clock = pygame.time.Clock() 
@@ -136,6 +138,12 @@ class question:
 		self.answer_tekaku.setichi( (screen_size[0]*0.75-answer_size/2, \
 								screen_size[1]-pix_to_ground-answer_size ))		
 		self.buttons.add(self.answer_tekaku)
+		#右下角清除图像
+		clean_paper = button( u'消',[30, 30], wasurenagusa, sorairo)
+		clean_paper.setichi( [self.answer_tekaku.get_ichi()[0]+answer_size-30, \
+							  self.answer_tekaku.get_ichi()[1]])
+		clean_paper.link_to('self.answer_tekaku.clean()')		
+		self.buttons.add(clean_paper)
 		
 		#按钮部分
 		#右下角提交		
@@ -188,9 +196,9 @@ class question:
 		wait = pygame.Surface( [wait_width, wait_height], flags=SRCALPHA, depth=32)		
 		for p in probs :
 			x = p * wait_width
-			pygame.draw.aaline( wait, black, [x-1, 0], [x-1,wait_height], False )
+			#pygame.draw.aaline( wait, black, [x-1, 0], [x-1,wait_height], False )
 			pygame.draw.aaline( wait, black, [x, 0], [x,wait_height], False )
-			pygame.draw.aaline( wait, black, [x+1, 0], [x+1,wait_height], False )
+			#pygame.draw.aaline( wait, black, [x+1, 0], [x+1,wait_height], False )
 			
 		wait = kazari( wait )
 		wait.setichi( [screen_size[0]*0.25, screen_size[1]*0.3] )
@@ -225,6 +233,8 @@ class question:
 		hp = time_to_hp(all_score)
 		
 	def run(self, screen):
+		screen.blit( self.background, (0,0) ) #画背景
+		#self.answer_tekaku.realdraw(screen)
 
 		while True:    
 		    for event in pygame.event.get():
@@ -244,7 +254,7 @@ class question:
 		        	self.answer_tekaku.hands_on(event.pos)
 		            
 		    clock.tick(60)
-		    screen.blit( self.background, (0,0) ) #画背景
+		    
 
 		    for w in self.words :
 		    	w.draw(screen)	

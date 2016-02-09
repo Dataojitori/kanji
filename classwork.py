@@ -56,7 +56,7 @@ class button(bun):
         #可执行语句
         self.magic = "None"
         #是否隐藏
-        self.hide_all = False
+        self.hide_all = False        
         
     def setichi(self, ichi):
         #设定左上角坐标,并生成按钮工作区
@@ -105,10 +105,10 @@ class button(bun):
         self.tu.fill(self.color_normal)
         if not self.hide_all :            
             if self.rect.collidepoint(pos) :                      
-                return self.magic  
+                return self.magic        
         
     def draw(self, screen):
-        #给定表面,画图
+        #给定表面,画图       
         if self.hide_all == False:
             screen.blit( self.tu, self.ichi)
             if self.draw_word == True :
@@ -120,8 +120,15 @@ class paper(object):
     brush_size = 5
     def __init__(self, size, backcolor):
         self.size = size
-        self.screen = pygame.Surface(self.size)
-        self.screen.fill(backcolor)           
+        self.backcolor = backcolor
+        self.screen = pygame.Surface(self.size, flags=SRCALPHA, depth=32)
+        self.pointlist = [ (0,0), (self.size[0]-30,0), \
+                           (self.size[0]-30,30), \
+                           (self.size[0],30), \
+                           (self.size[0],self.size[1]), \
+                           (0, self.size[1]) ]
+        pygame.draw.polygon(self.screen, self.backcolor, self.pointlist)
+        #self.screen.fill(self.backcolor)           
         
         self.drawing = False
         
@@ -134,26 +141,32 @@ class paper(object):
         
     def combo(self, pos):
         #检测所给坐标是否在绘图区域内,是就开启绘图开关     
-        if self.rect.collidepoint(pos) :
-            self.drawing = True
-            self.last_pos = pos
+        #if self.rect.collidepoint(pos) :
+        self.drawing = True
+        self.last_pos = (pos[0] - self.ichi[0], pos[1] - self.ichi[1] )            
             
     def reset(self, pos):
-        #抬起画笔           
-        if self.rect.collidepoint(pos) :
-            self.drawing = False                              
-            return "pass"
+        #抬起画笔                   
+        self.drawing = False                              
+        return "pass"
     
+    def clean(self):
+        #清除图像
+        self.screen = pygame.Surface(self.size, flags=SRCALPHA, depth=32)
+        pygame.draw.polygon(self.screen, self.backcolor, self.pointlist)
+        #self.screen.fill(self.backcolor)      
+        
     def hands_on(self, pos):
         #画图
-        if self.drawing :
+        if self.drawing :                       
+            pos = (pos[0] - self.ichi[0], pos[1] - self.ichi[1] )          
             pygame.draw.line(self.screen, self.brush_color, self.last_pos, \
                 pos, self.brush_size)
             self.last_pos = pos
             
+            
     def draw(self, screen):
-        screen.blit( self.screen, self.ichi)               
-                
+        screen.blit( self.screen, self.ichi)  
          
 
 def num_to_probability(num) :
