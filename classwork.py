@@ -115,6 +115,46 @@ class button(bun):
                 super(button, self).draw(screen)
             #print self.hide, time.time()
 
+class paper(object):
+    brush_color = (0,0,0)
+    brush_size = 5
+    def __init__(self, size, backcolor):
+        self.size = size
+        self.screen = pygame.Surface(self.size)
+        self.screen.fill(backcolor)           
+        
+        self.drawing = False
+        
+    def setichi(self, ichi):
+        self.ichi = ichi
+        self.rect = Rect(self.ichi, self.size)
+        
+    def get_ichi(self) :
+        return self.ichi
+        
+    def combo(self, pos):
+        #检测所给坐标是否在绘图区域内,是就开启绘图开关     
+        if self.rect.collidepoint(pos) :
+            self.drawing = True
+            self.last_pos = pos
+            
+    def reset(self, pos):
+        #抬起画笔           
+        if self.rect.collidepoint(pos) :
+            self.drawing = False                              
+            return "pass"
+    
+    def hands_on(self, pos):
+        #画图
+        if self.drawing :
+            pygame.draw.line(self.screen, self.brush_color, self.last_pos, \
+                pos, self.brush_size)
+            self.last_pos = pos
+            
+    def draw(self, screen):
+        screen.blit( self.screen, self.ichi)               
+                
+         
 
 def num_to_probability(num) :
     #给一个分数,根据1 / ( 1 + e**z)返回它的对应概率
@@ -172,11 +212,11 @@ def pickup(datas):
             totla_prob -= data_to_probability( mygame[key] )
             if totla_prob < 0 :
                 quiz = mondai[ random.choice(mygame[key]['ichi'])-1 ]
-                return [ mygame[key], quiz, filename, aver_time, aver_prob ]
+                return [ mygame[key], quiz, filename, aver_time, aver_prob, probabilitys]
                 
 def pickup2(datas):
     #传入不同年级题库的集合,按照加权对出题优先度排序后返回优先度最高的一题
-    #返回所选题的[data,题目,文件名]
+    #返回所选题的[data,题目,文件名,加权平均小时,加权平均概率,所有的概率列表]
     
     #求总加权分数
     zu = []

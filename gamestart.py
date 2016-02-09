@@ -95,7 +95,7 @@ class question:
 		kanji_size = 80
 		kana_size = 40
 		#随机抽取一道题的data,问题,所属题库文件名
-		self.one_data, mondai, self.filename, shinsen, cooldown, probs = pickup2(alldatas) 
+		self.one_data, mondai, self.filename, shinsen, cooldown, probs = pickup(alldatas) 
 		print "probability" , data_to_probability(self.one_data)
 		#修正题目为全假名的情况
 		mondai = is_all_kana(mondai)
@@ -132,17 +132,17 @@ class question:
 		self.answer.block_word()
 		self.words.add(self.answer)
 		#右边手写区
-		answer_tekaku = button( "", (answer_size, answer_size), (255,231,231) )		
-		answer_tekaku.setichi( (screen_size[0]*0.75-answer_size/2, \
+		self.answer_tekaku = paper( (answer_size, answer_size), (255,231,231) )		
+		self.answer_tekaku.setichi( (screen_size[0]*0.75-answer_size/2, \
 								screen_size[1]-pix_to_ground-answer_size ))		
-		self.words.add(answer_tekaku)
+		self.buttons.add(self.answer_tekaku)
 		
 		#按钮部分
 		#右下角提交		
 		self.submit = button('submit', (answer_size, pix_to_ground), \
 							 light_blue, ruriiro)
-		self.submit.setichi( [answer_tekaku.get_ichi()[0], \
-						 answer_tekaku.get_ichi()[1] + answer_size] )
+		self.submit.setichi( [self.answer_tekaku.get_ichi()[0], \
+						 self.answer_tekaku.get_ichi()[1] + answer_size] )
 		self.submit.link_to( "self.answer.show_word(); self.submit.hide_button(); \
 						      self.right.show_button(); self.wrong.show_button()" )
 		
@@ -160,7 +160,8 @@ class question:
 		 					 self.answer.get_ichi()[1] + answer_size/2) )
 		self.wrong.link_to( "self.submit_answer('wrong')" )
 		self.wrong.hide_button()
-		self.buttons.add(self.wrong)
+		self.buttons.add(self.wrong)		
+		
 		
 		#显示分数
 		global all_score
@@ -239,6 +240,8 @@ class question:
 		        		if click :		        			
 		        			#print 'hit'			    		        				
 		        			exec click   				        		
+		        elif event.type == MOUSEMOTION:
+		        	self.answer_tekaku.hands_on(event.pos)
 		            
 		    clock.tick(60)
 		    screen.blit( self.background, (0,0) ) #画背景
