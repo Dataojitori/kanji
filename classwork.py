@@ -117,7 +117,7 @@ class button(bun):
 
 class paper(object):
     brush_color = (0,0,0)
-    brush_size = 5
+    brush_size = 4
     def __init__(self, size, backcolor):
         self.size = size
         self.backcolor = backcolor

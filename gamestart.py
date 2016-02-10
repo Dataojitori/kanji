@@ -233,10 +233,8 @@ class question:
 		hp = time_to_hp(all_score)
 		
 	def run(self, screen):
-		screen.blit( self.background, (0,0) ) #画背景
-		#self.answer_tekaku.realdraw(screen)
-
-		while True:    
+		#screen.blit( self.background, (0,0) ) #画背景	
+		while True:    				
 		    for event in pygame.event.get():
 		        if event.type == QUIT:            
 		            pygame.quit()
@@ -254,6 +252,7 @@ class question:
 		        	self.answer_tekaku.hands_on(event.pos)
 		            
 		    clock.tick(60)
+		    screen.blit( self.background, (0,0) ) 		
 		    
 
 		    for w in self.words :
