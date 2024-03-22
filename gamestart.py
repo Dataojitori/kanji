@@ -1,3 +1,4 @@
+#! python2
 # -*- coding:utf-8 -*-
 import pygame, time, pickle
 from pygame.locals import *
@@ -22,12 +23,12 @@ sorairo = (160,216,239)
 pygame.init()
 clock = pygame.time.Clock() 
 screen = pygame.display.set_mode(screen_size, 0, 32)
-pygame.display.set_caption("ソフト")
+pygame.display.set_caption(u"ソフト")
 background = pygame.image.load("stp_l_017.jpg").convert()
 
 #读取题库
 alldatas = {}
-for n in range(7)[1:] : 
+for n in range(8)[1:] : 
     my_file = open('kakidata'+str(n)+'.txt','r')  
     my_data = pickle.load(my_file)
     my_file.close()  
@@ -179,6 +180,7 @@ class question:
 		self.words.add(seiseki)
 		#显示hp
 		global hp
+		hp = 0
 		life = bun( 'hp:'+str(round(hp, 2)), num_size )
 		life.setichi( [screen_size[0] - life.get_width(), num_size*1])
 		self.words.add(life)
